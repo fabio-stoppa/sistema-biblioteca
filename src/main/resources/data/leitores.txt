@@ -1,0 +1,8 @@
+João Pedro Martins;joao.martins@email.com;11122233344;11998877665;BRONZE;500.00;2024-10-15
+Maria Fernanda Costa;maria.costa@email.com;22233344455;11998877666;PRATA;1000.00;2024-10-20
+Lucas Gabriel Santos;lucas.santos@email.com;33344455566;11998877667;OURO;2500.00;2024-11-01
+Beatriz Helena Souza;beatriz.souza@email.com;44455566677;11998877668;DIAMANTE;5000.00;2024-11-02
+Rafael Augusto Lima;rafael.lima@email.com;55566677788;11998877669;BRONZE;500.00;2024-09-10
+Camila Vitória Alves;camila.alves@email.com;66677788899;11998877670;PRATA;1200.00;2024-10-25
+Pedro Henrique Silva;pedro.silva@email.com;77788899900;11998877671;OURO;3000.00;2024-10-30
+Ana Carolina Rocha;ana.rocha@email.com;88899900011;11998877672;DIAMANTE;4500.00;null
