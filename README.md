@@ -134,6 +134,25 @@ mvn spring-boot:run
 
 ---
 
+## 🖥️ Como acessar o Console H2
+
+1. Inicie a aplicação (veja a seção "Como Executar").
+2. Acesse no navegador: `http://localhost:8080/h2-console`.
+3. Na tela do H2, preencha os campos assim:
+   - JDBC URL: `jdbc:h2:mem:bibliotecadb`
+   - User Name: `sa`
+   - Password: (deixe em branco)
+4. Clique em "Connect".
+
+Após conectar, você pode executar consultas SQL como:
+
+```sql
+SELECT * FROM BIBLIOTECARIO;
+SELECT * FROM LEITOR;
+SELECT * FROM EMPRESTIMO;
+```
+
+
 ## 📡 Endpoints da API
 
 ### Bibliotecários (`/bibliotecarios`)
