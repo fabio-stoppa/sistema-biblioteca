@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "leitores")
@@ -25,6 +26,7 @@ public class Leitor extends Pessoa {
     private Double limiteCredito;
 
     @OneToMany(mappedBy = "leitor", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Emprestimo> emprestimos = new ArrayList<>();
 
     private LocalDate dataUltimaLeitura;

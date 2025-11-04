@@ -28,7 +28,7 @@ Sistema completo de gestão de biblioteca desenvolvido com Spring Boot, implemen
 
 ### ✅ Feature 2: Expansão do Modelo de Domínio e CRUD Completo
 - [x] Herança: Classe abstrata Pessoa → Bibliotecario e Leitor
-- [x] Associação: Relacionamento OneToOne (Bibliotecario ↔ Endereco)
+- [x] Associação: Relacionamento @Embedded (Pessoa ↔ Endereco)
 - [x] CRUD completo para todas as entidades
 - [x] Métodos específicos (inativar, atualizarFidelidade)
 - [x] Loaders independentes para cada entidade
@@ -49,6 +49,7 @@ Sistema completo de gestão de biblioteca desenvolvido com Spring Boot, implemen
 - [x] Query Methods avançados nos repositórios
 - [x] Loader com associação dinâmica via CPF
 - [x] Estrutura de erro padronizada (ErrorResponse)
+- [x] JSON circular reference handling (@JsonManagedReference/@JsonBackReference)
 
 ---
 
@@ -93,8 +94,9 @@ com.biblioteca
 ```
 Pessoa (Classe Abstrata)
 ├── Bibliotecario
-│   └── Endereco (OneToOne)
+│   └── Endereco (@Embedded)
 └── Leitor
+    ├── Endereco (@Embedded)
     └── Emprestimo[] (OneToMany)
 ```
 
@@ -111,7 +113,7 @@ Pessoa (Classe Abstrata)
 
 1. **Clone o repositório**
 ```bash
-git clone [URL_DO_SEU_REPOSITORIO]
+git clone https://github.com/fabio-stoppa/sistema-biblioteca.git
 cd sistema-biblioteca
 ```
 
@@ -132,11 +134,15 @@ mvn spring-boot:run
     - Username: `sa`
     - Password: (deixe em branco)
 
+5. **Dados carregados automaticamente**
+    - 5 bibliotecários com endereços completos
+    - 8 leitores com endereços completos
+    - 12 empréstimos vinculados aos leitores
 ---
 
 ## 🖥️ Como acessar o Console H2
 
-1. Inicie a aplicação (veja a seção "Como Executar").
+1. Inicie a aplicação (veja a seção [Como Executar](#-como-executar)).
 2. Acesse no navegador: `http://localhost:8080/h2-console`.
 3. Na tela do H2, preencha os campos assim:
    - JDBC URL: `jdbc:h2:mem:bibliotecadb`
@@ -213,18 +219,19 @@ SELECT * FROM EMPRESTIMO;
   "email": "teste@biblioteca.com",
   "cpf": "99988877766",
   "telefone": "11999887766",
-  "matricula": 2001,
+  "codigoFuncionario": "FUNC-2001",
+  "matricula": "2001",
   "salario": 4000.00,
-  "ehAtivo": true,
+  "ativo": true,
+  "turno": "MANHÃ",
   "endereco": {
     "cep": "01310100",
     "logradouro": "Avenida Paulista",
+    "numero": "1000",
     "complemento": "Apto 101",
-    "unidade": "Torre B",
     "bairro": "Bela Vista",
-    "localidade": "São Paulo",
-    "uf": "SP",
-    "estado": "São Paulo"
+    "cidade": "São Paulo",
+    "estado": "SP"
   }
 }
 ```
@@ -239,9 +246,20 @@ SELECT * FROM EMPRESTIMO;
   "email": "leitor@email.com",
   "cpf": "12312312399",
   "telefone": "11998765432",
+  "matricula": "LEIT-123",
   "fidelidade": "OURO",
   "limiteCredito": 2000.00,
-  "dataUltimaLeitura": "2024-11-01"
+  "dataUltimaLeitura": "2024-11-01",
+  "ativo": true,
+  "endereco": {
+    "cep": "01310100",
+    "logradouro": "Rua Augusta",
+    "numero": "500",
+    "complemento": "Apto 201",
+    "bairro": "Consolação",
+    "cidade": "São Paulo",
+    "estado": "SP"
+  }
 }
 ```
 
@@ -252,6 +270,7 @@ SELECT * FROM EMPRESTIMO;
 ```json
 {
   "tituloLivro": "Clean Code",
+  "autor": "Robert C. Martin",
   "isbn": "9780132350884",
   "dataEmprestimo": "2024-11-01",
   "dataDevolucaoPrevista": "2024-11-15",
@@ -273,6 +292,8 @@ SELECT * FROM EMPRESTIMO;
 - Telefone: 10-11 dígitos, obrigatório
 - Matrícula: >= 1000, obrigatória, única
 - Salário: >= R$ 1.320,00 e <= R$ 50.000,00
+- Código Funcionário: obrigatório, único
+- Endereço: objeto completo com CEP válido (8 dígitos)
 
 ### Leitor
 - Nome: 3-100 caracteres, obrigatório
@@ -281,10 +302,13 @@ SELECT * FROM EMPRESTIMO;
 - Telefone: 10-11 dígitos, obrigatório
 - Fidelidade: BRONZE, PRATA, OURO ou DIAMANTE
 - Limite de Crédito: 0 a R$ 10.000,00
+- Matrícula: obrigatória, única
+- Endereço: objeto completo com CEP válido (8 dígitos)
 
 ### Empréstimo
 - Título: 2-200 caracteres, obrigatório
-- ISBN: 13 dígitos, obrigatório
+- Autor: opcional
+- ISBN: opcional
 - Data Empréstimo: não pode ser futura
 - Data Devolução Prevista: deve ser futura
 - Leitor: obrigatório (relacionamento)
@@ -299,7 +323,7 @@ SELECT * FROM EMPRESTIMO;
     - Spring Data JPA
     - Spring Validation
 - **H2 Database** (em memória)
-- **Lombok** (redução de boilerplate)
+- **Jackson**
 - **Maven** (gerenciamento de dependências)
 - **Jakarta EE** (Validation e Persistence)
 
@@ -310,7 +334,7 @@ SELECT * FROM EMPRESTIMO;
 ### POO
 - ✅ Herança (Pessoa → Bibliotecario, Leitor)
 - ✅ Polimorfismo (CrudService interface)
-- ✅ Encapsulamento (getters/setters com Lombok)
+- ✅ Encapsulamento (getters/setters)
 - ✅ Abstração (classe Pessoa abstrata)
 
 ### Spring Framework
@@ -319,13 +343,15 @@ SELECT * FROM EMPRESTIMO;
 - ✅ Spring Data JPA
 - ✅ Bean Validation
 - ✅ Exception Handling (@ControllerAdvice)
+- ✅ ApplicationRunner (@Order para sequência de carga)
 
 ### JPA/Hibernate
 - ✅ @Entity, @Table, @Id, @GeneratedValue
-- ✅ @OneToOne, @ManyToOne, @OneToMany
+- ✅ @ManyToOne, @OneToMany
 - ✅ @MappedSuperclass (herança)
 - ✅ Cascade e Orphan Removal
 - ✅ FetchType (LAZY/EAGER)
+- ✅ @Embedded/@Embeddable (Endereco)
 
 ### API REST
 - ✅ HTTP Methods (GET, POST, PUT, PATCH, DELETE)
@@ -333,18 +359,36 @@ SELECT * FROM EMPRESTIMO;
 - ✅ ResponseEntity
 - ✅ @RequestParam, @PathVariable, @RequestBody
 - ✅ Tratamento de erros estruturado
+- ✅ Prevenção de referência circular JSON
 
 ---
 
 ## 📦 Estrutura de Arquivos de Dados
 
-Os arquivos de carga inicial estão em `src/main/resources/data/`:
+### bibliotecarios.txt (5 registros)
+Formato:`nome;email;cpf;telefone;matricula;codigoFuncionario;cep;logradouro;complemento;numero;bairro;cidade;uf;estadoNome;salario;ativo;turno`
 
-- `bibliotecarios.txt` - 5 registros
-- `leitores.txt` - 8 registros
-- `emprestimos.txt` - 12 registros
+### leitores.txt (8 registros)
+Formato:`nome;email;cpf;telefone;matricula;fidelidade;limiteCredito;dataUltimaLeitura;cep;logradouro;complemento;numero;bairro;cidade;uf`
 
-Os loaders são executados na ordem: Bibliotecarios → Leitores → Emprestimos
+### emprestimos.txt (12 registros)
+Formato:`cpfLeitor;tituloLivro;autor;isbn;dataEmprestimo;dataDevolucaoPrevista;dataDevolucaoReal;devolvido`
+
+**Os loaders são executados na ordem:**
+1. BibliotecarioLoader (@Order(1))
+2. LeitorLoader (@Order(2))
+3. EmprestimoLoader (@Order(3)) - usa CPF para vincular ao leitor
+
+---
+
+## 📋 Observações Importantes
+
+1. **Banco H2 em Memória**: Os dados são perdidos quando a aplicação é encerrada
+2. **Loaders Automáticos**: Dados são carregados automaticamente na inicialização via `ApplicationRunner`
+3. **Validações**: Bean Validation ativo em todos os endpoints POST/PUT
+4. **Tratamento de Erros**: GlobalExceptionHandler captura e formata todos os erros
+5. **Referências Circulares**: Resolvidas com @JsonManagedReference/@JsonBackReference
+6. **Endereços**: Tanto Bibliotecário quanto Leitor possuem endereços completos
 
 ---
 

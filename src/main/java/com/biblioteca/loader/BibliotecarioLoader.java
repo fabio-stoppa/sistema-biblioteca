@@ -15,6 +15,9 @@ import java.io.InputStreamReader;
 /**
  * Loader para carregar bibliotecários do arquivo bibliotecarios.txt
  * Feature 4 - População de dados via ApplicationRunner
+ *
+ * Formato do arquivo:
+ * nome;email;cpf;telefone;matricula;codigoFuncionario;cep;logradouro;complemento;numero;bairro;cidade;uf;estadoNome;salario;ativo;turno
  */
 @Component
 @Order(1)
@@ -48,16 +51,13 @@ public class BibliotecarioLoader implements ApplicationRunner {
 
                 // Criar endereço
                 Endereco endereco = new Endereco();
-                endereco.setCep(dados[5]);
-                endereco.setLogradouro(dados[6]);
-                endereco.setComplemento(dados[7]);
-                // Mapear 'unidade' do arquivo para o campo 'numero' do endereço
-                endereco.setNumero(dados[8]);
-                endereco.setBairro(dados[9]);
-                endereco.setCidade(dados[10]);
-                // Nosso modelo possui apenas 'estado'; armazenar a UF (dados[11]) ou o nome completo (dados[12]).
-                // Aqui optamos pela UF (sigla) por ser mais concisa.
-                endereco.setEstado(dados[11]);
+                endereco.setCep(dados[6]);
+                endereco.setLogradouro(dados[7]);
+                endereco.setComplemento(dados[8]);
+                endereco.setNumero(dados[9]);
+                endereco.setBairro(dados[10]);
+                endereco.setCidade(dados[11]);
+                endereco.setEstado(dados[12]); // UF
 
                 // Criar bibliotecário
                 Bibliotecario bibliotecario = new Bibliotecario();
@@ -66,8 +66,12 @@ public class BibliotecarioLoader implements ApplicationRunner {
                 bibliotecario.setCpf(dados[2]);
                 bibliotecario.setTelefone(dados[3]);
                 bibliotecario.setMatricula(dados[4]);
-                bibliotecario.setSalario(Double.parseDouble(dados[13]));
-                bibliotecario.setAtivo(Boolean.parseBoolean(dados[14]));
+                bibliotecario.setCodigoFuncionario(dados[5]);
+                bibliotecario.setSalario(Double.parseDouble(dados[14]));
+                bibliotecario.setAtivo(Boolean.parseBoolean(dados[15]));
+                if (dados.length > 16 && !dados[16].trim().isEmpty()) {
+                    bibliotecario.setTurno(dados[16]);
+                }
                 bibliotecario.setEndereco(endereco);
 
                 service.incluir(bibliotecario);
@@ -75,11 +79,10 @@ public class BibliotecarioLoader implements ApplicationRunner {
             }
 
             System.out.println("✅ " + contador + " bibliotecários carregados com sucesso!");
-            System.out.println("\n📋 Lista de bibliotecários:");
-            service.listarTodos().forEach(System.out::println);
 
         } catch (Exception e) {
             System.err.println("❌ Erro ao carregar bibliotecários: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

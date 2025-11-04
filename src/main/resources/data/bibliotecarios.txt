@@ -1,5 +1,5 @@
-Ana Silva Santos;ana.silva@biblioteca.com;12345678901;11987654321;1001;01310100;Avenida Paulista;Apto 501;Torre A;Bela Vista;São Paulo;SP;São Paulo;4500.00;true
-Carlos Eduardo Oliveira;carlos.oliveira@biblioteca.com;23456789012;11987654322;1002;04543907;Rua dos Pinheiros;Casa;;Pinheiros;São Paulo;SP;São Paulo;5200.00;true
-Mariana Costa Lima;mariana.lima@biblioteca.com;34567890123;11987654323;1003;22250040;Avenida Atlântica;Cobertura 1201;;Copacabana;Rio de Janeiro;RJ;Rio de Janeiro;6100.00;true
-Roberto Pereira Souza;roberto.souza@biblioteca.com;45678901234;11987654324;1004;30130100;Rua da Bahia;Sala 302;;Centro;Belo Horizonte;MG;Minas Gerais;3800.00;false
-Juliana Ferreira Alves;juliana.alves@biblioteca.com;56789012345;11987654325;1005;80010000;Rua XV de Novembro;Conjunto 501;;Centro;Curitiba;PR;Paraná;4200.00;true
+Ana Silva Santos;ana.silva@biblioteca.com;12345678901;11987654321;1001;FUNC-1001;01310100;Avenida Paulista;Apto 501;Torre A;Bela Vista;São Paulo;SP;São Paulo;4500.00;true;MANHÃ
+Carlos Eduardo Oliveira;carlos.oliveira@biblioteca.com;23456789012;11987654322;1002;FUNC-1002;04543907;Rua dos Pinheiros;Casa;;Pinheiros;São Paulo;SP;São Paulo;5200.00;true;TARDE
+Mariana Costa Lima;mariana.lima@biblioteca.com;34567890123;11987654323;1003;FUNC-1003;22250040;Avenida Atlântica;Cobertura 1201;;Copacabana;Rio de Janeiro;RJ;Rio de Janeiro;6100.00;true;MANHÃ
+Roberto Pereira Souza;roberto.souza@biblioteca.com;45678901234;11987654324;1004;FUNC-1004;30130100;Rua da Bahia;Sala 302;;Centro;Belo Horizonte;MG;Minas Gerais;3800.00;false;NOITE
+Juliana Ferreira Alves;juliana.alves@biblioteca.com;56789012345;11987654325;1005;FUNC-1005;80010000;Rua XV de Novembro;Conjunto 501;;Centro;Curitiba;PR;Paraná;4200.00;true;MANHÃ

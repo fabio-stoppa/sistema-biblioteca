@@ -2,8 +2,8 @@ package com.biblioteca.loader;
 
 import com.biblioteca.domain.Emprestimo;
 import com.biblioteca.domain.Leitor;
+import com.biblioteca.repository.LeitorRepository;
 import com.biblioteca.service.EmprestimoService;
-import com.biblioteca.service.LeitorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,21 +13,24 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Loader para carregar empréstimos do arquivo emprestimos.txt
- * Feature 4 - População com relacionamento OneToMany
- * Busca o Leitor pelo CPF antes de associar ao empréstimo
+ * Feature 4 - População de dados via ApplicationRunner
+ *
+ * Formato do arquivo:
+ * cpfLeitor;tituloLivro;autor;isbn;dataEmprestimo;dataDevolucaoPrevista;dataDevolucaoReal;devolvido
  */
 @Component
 @Order(3)
 public class EmprestimoLoader implements ApplicationRunner {
 
     @Autowired
-    private EmprestimoService emprestimoService;
+    private EmprestimoService service;
 
     @Autowired
-    private LeitorService leitorService;
+    private LeitorRepository leitorRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -52,31 +55,36 @@ public class EmprestimoLoader implements ApplicationRunner {
 
                 String[] dados = linha.split(";");
 
-                // Feature 4: Buscar o Leitor pelo CPF usando Query Method
+                // Buscar leitor pelo CPF
                 String cpfLeitor = dados[0];
-                Leitor leitor = leitorService.buscarPorCpf(cpfLeitor);
+                Optional<Leitor> leitorOpt = leitorRepository.findByCpf(cpfLeitor);
+
+                if (leitorOpt.isEmpty()) {
+                    System.err.println("⚠️  Leitor com CPF " + cpfLeitor + " não encontrado. Pulando empréstimo.");
+                    continue;
+                }
 
                 // Criar empréstimo
                 Emprestimo emprestimo = new Emprestimo();
+                emprestimo.setLeitor(leitorOpt.get());
                 emprestimo.setTituloLivro(dados[1]);
-                emprestimo.setIsbn(dados[2]);
-                emprestimo.setDataEmprestimo(LocalDate.parse(dados[3]));
-                emprestimo.setDataDevolucaoPrevista(LocalDate.parse(dados[4]));
+                emprestimo.setAutor(dados[2]); // Autor adicionado
+                emprestimo.setIsbn(dados[3]);
+                emprestimo.setDataEmprestimo(LocalDate.parse(dados[4]));
+                emprestimo.setDataDevolucaoPrevista(LocalDate.parse(dados[5]));
 
-                if (!dados[5].equals("null")) {
-                    emprestimo.setDataDevolucaoReal(LocalDate.parse(dados[5]));
+                // Data devolução real pode ser null
+                if (dados.length > 6 && !dados[6].trim().isEmpty() && !dados[6].equalsIgnoreCase("null")) {
+                    emprestimo.setDataDevolucaoEfetiva(LocalDate.parse(dados[6]));
                 }
 
-                emprestimo.setDevolvido(Boolean.parseBoolean(dados[6]));
-                emprestimo.setLeitor(leitor);
+                emprestimo.setDevolvido(Boolean.parseBoolean(dados[7]));
 
-                emprestimoService.incluir(emprestimo);
+                service.incluir(emprestimo);
                 contador++;
             }
 
             System.out.println("✅ " + contador + " empréstimos carregados com sucesso!");
-            System.out.println("\n📋 Lista de empréstimos:");
-            emprestimoService.listarTodos().forEach(System.out::println);
 
         } catch (Exception e) {
             System.err.println("❌ Erro ao carregar empréstimos: " + e.getMessage());

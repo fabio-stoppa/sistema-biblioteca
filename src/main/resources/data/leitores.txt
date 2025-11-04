@@ -1,8 +1,8 @@
-João Pedro Martins;joao.martins@email.com;11122233344;11998877665;BRONZE;500.00;2024-10-15
-Maria Fernanda Costa;maria.costa@email.com;22233344455;11998877666;PRATA;1000.00;2024-10-20
-Lucas Gabriel Santos;lucas.santos@email.com;33344455566;11998877667;OURO;2500.00;2024-11-01
-Beatriz Helena Souza;beatriz.souza@email.com;44455566677;11998877668;DIAMANTE;5000.00;2024-11-02
-Rafael Augusto Lima;rafael.lima@email.com;55566677788;11998877669;BRONZE;500.00;2024-09-10
-Camila Vitória Alves;camila.alves@email.com;66677788899;11998877670;PRATA;1200.00;2024-10-25
-Pedro Henrique Silva;pedro.silva@email.com;77788899900;11998877671;OURO;3000.00;2024-10-30
-Ana Carolina Rocha;ana.rocha@email.com;88899900011;11998877672;DIAMANTE;4500.00;null
+João Pedro Martins;joao.martins@email.com;11122233344;11998877665;LEIT-11122;BRONZE;500.00;2024-10-15;01310100;Rua Augusta;Apto 201;;Consolação;São Paulo;SP
+Maria Fernanda Costa;maria.costa@email.com;22233344455;11998877666;LEIT-22233;PRATA;1000.00;2024-10-20;04543907;Rua dos Pinheiros;Casa 10;;Pinheiros;São Paulo;SP
+Lucas Gabriel Santos;lucas.santos@email.com;33344455566;11998877667;LEIT-33344;OURO;2500.00;2024-11-01;22250040;Avenida Atlântica;Apto 501;Bloco B;Copacabana;Rio de Janeiro;RJ
+Beatriz Helena Souza;beatriz.souza@email.com;44455566677;11998877668;LEIT-44455;DIAMANTE;5000.00;2024-11-02;30130100;Rua da Bahia;Sala 1002;;Centro;Belo Horizonte;MG
+Rafael Augusto Lima;rafael.lima@email.com;55566677788;11998877669;LEIT-55566;BRONZE;500.00;2024-09-10;80010000;Rua XV de Novembro;Apto 305;;Centro;Curitiba;PR
+Camila Vitória Alves;camila.alves@email.com;66677788899;11998877670;LEIT-66677;PRATA;1200.00;2024-10-25;90010000;Rua dos Andradas;Casa;;Centro Histórico;Porto Alegre;RS
+Pedro Henrique Silva;pedro.silva@email.com;77788899900;11998877671;LEIT-77788;OURO;3000.00;2024-10-30;40010000;Avenida Sete de Setembro;Sala 201;;Centro;Salvador;BA
+Ana Carolina Rocha;ana.rocha@email.com;88899900011;11998877672;LEIT-88899;DIAMANTE;4500.00;2024-10-28;60010000;Rua Major Facundo;Apto 101;;Centro;Fortaleza;CE
